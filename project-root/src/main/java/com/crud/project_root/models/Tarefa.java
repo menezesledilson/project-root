@@ -9,13 +9,13 @@ import java.util.Objects;
 public class Tarefa {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @Column(name = "id")
     private  Long id;
 
-    @Column(nullable = false, length = 80)
+    @Column(name = "descricao")
     private String descricao;
 
-    @Column(nullable = false, length = 50)
+    @Column(name = "status")
     private String status;
 
     public Tarefa(){}
@@ -26,18 +26,6 @@ public class Tarefa {
         this.status = status;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Tarefa tarefa = (Tarefa) o;
-        return Objects.equals(id, tarefa.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(id);
-    }
 
     public Long getId() {
         return id;
@@ -70,6 +58,19 @@ public class Tarefa {
                 ", descricao='" + descricao + '\'' +
                 ", status='" + status + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tarefa tarefa = (Tarefa) o;
+        return Objects.equals(id, tarefa.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 
 
