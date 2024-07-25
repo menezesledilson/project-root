@@ -13,20 +13,32 @@ import java.util.Optional;
 public class TarefaController {
 
     @Autowired
-    private TarefaService  tarefaService;
+    private TarefaService tarefaService;
 
     @GetMapping("/all")
     public List<Tarefa> getAll() {
+
         return this.tarefaService.getAll();
     }
 
     @GetMapping("/all/{id}")
-    public Optional<Tarefa> getTarefaId(@PathVariable Long id){
+    public Optional<Tarefa> getTarefaId(@PathVariable Long id) {
+
         return tarefaService.getTarefaId(id);
     }
+
     @DeleteMapping("/delete/id/{id}")
     public void deleteTarefa(@PathVariable("id") Long id) {
+
         tarefaService.deleteTarefa(id);
     }
 
+    @PostMapping("/create")
+    public Tarefa postTarefa(@RequestBody Tarefa tarefa){
+      return tarefaService.criarTarefa(tarefa);
+    }
+    @PutMapping("/update/{id}")
+    public Tarefa putTarefa(@PathVariable Long id,@RequestBody Tarefa tarefa){
+        return  tarefaService.editarTarefa(id,tarefa);
+    }
 }
