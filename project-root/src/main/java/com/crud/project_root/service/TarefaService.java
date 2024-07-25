@@ -2,10 +2,9 @@ package com.crud.project_root.service;
 
 import com.crud.project_root.models.Tarefa;
 import com.crud.project_root.repositories.TarefaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.crud.project_root.service.Exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,30 +15,49 @@ public class TarefaService {
 
     private TarefaRepository tarefaRepository;
 
-    public TarefaService(TarefaRepository tarefaRepository){
+    public TarefaService(TarefaRepository tarefaRepository) {
         this.tarefaRepository = tarefaRepository;
     }
 
-    public List<Tarefa> getAll(){
-
-        return this.tarefaRepository.findAll();
+    public List<Tarefa> listTaskAll() {
+        return tarefaRepository.findAll();
     }
-    public Optional<Tarefa>getTarefaId(Long id){
 
-        return  this.tarefaRepository.findById(id);
+    public Tarefa searchTaskId(Long id) {
+        return tarefaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Task not found with id " + id));
     }
-    public  void deleteTarefa(Long id){
+
+    public Tarefa createTask(Tarefa tarefa) {
+        tarefa.setId(null);
+        return tarefaRepository.save(tarefa);
+    }
+
+    public Tarefa updateTask(Long id, Tarefa tarefa) {
+        // Verifica se a tarefa existe
+        Optional<Tarefa> existingTaskOpt = tarefaRepository.findById(id);
+
+        if (!existingTaskOpt.isPresent()) {
+            throw new ResourceNotFoundException("Tarefa não encontrada com o ID: " + id);
+        }
+
+        // Recupera a tarefa existente
+        Tarefa existingTask = existingTaskOpt.get();
+
+        // Atualiza os campos da tarefa existente com os novos dados
+        existingTask.setDescricao(tarefa.getDescricao());
+        existingTask.setStatus(tarefa.getStatus());
+
+        // Salva e retorna a tarefa atualizada
+        return tarefaRepository.save(existingTask);
+    }
+
+    public void deleteTask(Long id) {
 
         this.tarefaRepository.deleteById(id);
     }
 
-    public  Tarefa criarTarefa(Tarefa tarefa){
-        return this.tarefaRepository.save(tarefa);
-    }
 
-    public Tarefa editarTarefa(Long id,Tarefa tarefa){
-       tarefa.setId(id);
-        return  this.tarefaRepository.save(tarefa);
-    }
+
 
 }
