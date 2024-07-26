@@ -1,6 +1,5 @@
 package com.crud.project_root.controllers;
 
-
 import com.crud.project_root.models.Tarefa;
 import com.crud.project_root.service.TarefaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequestMapping(path = "/task")
@@ -24,22 +22,35 @@ public class TarefaController {
     @GetMapping("/all")
     public ResponseEntity<List<Tarefa>> getTaskAll() {
         List<Tarefa> tarefas = tarefaService.listTaskAll();
-        return  ResponseEntity.ok().body(tarefas);
+        return ResponseEntity.ok().body(tarefas);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Tarefa> getTaskById(@PathVariable Long id) {
+    public ResponseEntity<Map<String, Object>> getTaskById(@PathVariable Long id) {
         Tarefa tarefa = tarefaService.searchTaskId(id);
-        return ResponseEntity.ok().body(tarefa);
+
+        // Cria um mapa para a resposta
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Task found.");
+        response.put("task", tarefa);
+
+        return ResponseEntity.ok(response);
     }
+
     @PostMapping("/create")
-    public ResponseEntity<Tarefa> postTask(@RequestBody Tarefa tarefa) {
+    public ResponseEntity<Map<String, Object>> postTask(@RequestBody Tarefa tarefa) {
         Tarefa tarefaSalva = tarefaService.createTask(tarefa);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(tarefaSalva.getId())
                 .toUri();
-        return ResponseEntity.created(uri).body(tarefaSalva);
+
+        // Cria um mapa para a resposta
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Task created successfully.");
+        response.put("createdTask", tarefaSalva);
+
+        return ResponseEntity.created(uri).body(response);
     }
 
     @PutMapping("/update/{id}")
@@ -56,10 +67,9 @@ public class TarefaController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/delete/id/{id}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long id){
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         tarefaService.deleteTask(id);
-                return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build();
     }
-
 }

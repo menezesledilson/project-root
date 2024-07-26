@@ -3,17 +3,15 @@ package com.crud.project_root.service;
 import com.crud.project_root.models.Tarefa;
 import com.crud.project_root.repositories.TarefaRepository;
 import com.crud.project_root.service.Exceptions.ResourceNotFoundException;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-
 @Service
 public class TarefaService {
 
-    private TarefaRepository tarefaRepository;
+    private final TarefaRepository tarefaRepository;
 
     public TarefaService(TarefaRepository tarefaRepository) {
         this.tarefaRepository = tarefaRepository;
@@ -25,7 +23,7 @@ public class TarefaService {
 
     public Tarefa searchTaskId(Long id) {
         return tarefaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Task not found with id " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found with id " + id));
     }
 
     public Tarefa createTask(Tarefa tarefa) {
@@ -38,7 +36,7 @@ public class TarefaService {
         Optional<Tarefa> existingTaskOpt = tarefaRepository.findById(id);
 
         if (!existingTaskOpt.isPresent()) {
-            throw new ResourceNotFoundException("Tarefa não encontrada com o ID: " + id);
+            throw new ResourceNotFoundException("Task not found with id: " + id);
         }
 
         // Recupera a tarefa existente
@@ -53,11 +51,13 @@ public class TarefaService {
     }
 
     public void deleteTask(Long id) {
+        // Antes de deletar, verificamos se a tarefa existe
+        if (!tarefaRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Tarefa não encontrada com o ID: " + id);
+        }
 
         this.tarefaRepository.deleteById(id);
     }
-
-
-
-
 }
+
+//https://pt.aliexpress.com/item/1005006727659597.html?spm=a2g0o.detail.0.0.6611TubsTubsjr&mp=1&gatewayAdapt=glo2bra
