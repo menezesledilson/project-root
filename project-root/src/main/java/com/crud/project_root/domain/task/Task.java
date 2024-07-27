@@ -1,4 +1,4 @@
-package com.crud.project_root.domain;
+package com.crud.project_root.domain.task;
 
 //http://localhost:8081/swagger-ui/index.html
 import jakarta.persistence.*;

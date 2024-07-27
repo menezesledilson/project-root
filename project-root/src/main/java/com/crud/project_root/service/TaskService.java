@@ -1,6 +1,6 @@
 package com.crud.project_root.service;
 
-import com.crud.project_root.domain.Task;
+import com.crud.project_root.domain.task.Task;
 import com.crud.project_root.repositories.TaskRepository;
 import com.crud.project_root.service.Exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;

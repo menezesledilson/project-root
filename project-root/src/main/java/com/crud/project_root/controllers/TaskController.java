@@ -1,6 +1,6 @@
 package com.crud.project_root.controllers;
 
-import com.crud.project_root.domain.Task;
+import com.crud.project_root.domain.task.Task;
 import com.crud.project_root.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package com.crud.project_root.service;
 
-import com.crud.project_root.domain.User;
+import com.crud.project_root.domain.user.User;
 import com.crud.project_root.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
