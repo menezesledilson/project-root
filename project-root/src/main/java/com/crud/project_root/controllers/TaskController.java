@@ -1,7 +1,7 @@
 package com.crud.project_root.controllers;
 
-import com.crud.project_root.models.Tarefa;
-import com.crud.project_root.service.TarefaService;
+import com.crud.project_root.domain.Task;
+import com.crud.project_root.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,49 +14,49 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/task")
-public class TarefaController {
+public class TaskController {
 
     @Autowired
-    private TarefaService tarefaService;
+    private TaskService taskService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Tarefa>> getTaskAll() {
-        List<Tarefa> tarefas = tarefaService.listTaskAll();
-        return ResponseEntity.ok().body(tarefas);
+    public ResponseEntity<List<Task>> getTaskAll() {
+        List<Task> Tasks = taskService.listTaskAll();
+        return ResponseEntity.ok().body(Tasks);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getTaskById(@PathVariable Long id) {
-        Tarefa tarefa = tarefaService.searchTaskId(id);
+        Task task = taskService.searchTaskId(id);
 
         // Cria um mapa para a resposta
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Task found.");
-        response.put("task", tarefa);
+        response.put("task", task);
 
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Map<String, Object>> postTask(@RequestBody Tarefa tarefa) {
-        Tarefa tarefaSalva = tarefaService.createTask(tarefa);
+    public ResponseEntity<Map<String, Object>> postTask(@RequestBody Task task) {
+        Task taskSalve = taskService.createTask(task);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(tarefaSalva.getId())
+                .buildAndExpand(taskSalve.getId())
                 .toUri();
 
         // Cria um mapa para a resposta
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Task created successfully.");
-        response.put("createdTask", tarefaSalva);
+        response.put("createdTask", taskSalve);
 
         return ResponseEntity.created(uri).body(response);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Map<String, Object>> updateTask(@PathVariable Long id, @RequestBody Tarefa tarefa) {
+    public ResponseEntity<Map<String, Object>> updateTask(@PathVariable Long id, @RequestBody Task task) {
         // Atualiza a tarefa usando o serviço
-        Tarefa updatedTask = tarefaService.updateTask(id, tarefa);
+        Task updatedTask = taskService.updateTask(id, task);
 
         // Cria um mapa para a resposta
         Map<String, Object> response = new HashMap<>();
@@ -69,7 +69,7 @@ public class TarefaController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
-        tarefaService.deleteTask(id);
+        taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
     }
 }

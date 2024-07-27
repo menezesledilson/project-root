@@ -1,29 +1,30 @@
-package com.crud.project_root.models;
+package com.crud.project_root.domain;
 
+//http://localhost:8081/swagger-ui/index.html
 import jakarta.persistence.*;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "atividade")
-public class Tarefa {
+public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-   @Column(name = "id")
+    @Column(name = "id")
     private  Long id;
 
     @Column(name = "descricao")
-    private String descricao;
+    private String description;
 
     @Column(name = "status")
     private String status;
 
-    public Tarefa(){}
+    public Task(){}
 
-    public Tarefa(Long id, String descricao, String status) {
+    public Task(Long id, String description, String status) {
         this.id = id;
-        this.descricao = descricao;
+        this.description = description;
         this.status = status;
     }
 
@@ -36,12 +37,12 @@ public class Tarefa {
         this.id = id;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getStatus() {
@@ -56,7 +57,7 @@ public class Tarefa {
     public String toString() {
         return "Tarefa{" +
                 "id=" + id +
-                ", descricao='" + descricao + '\'' +
+                ", descricao='" + description + '\'' +
                 ", status='" + status + '\'' +
                 '}';
     }
@@ -65,8 +66,8 @@ public class Tarefa {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Tarefa tarefa = (Tarefa) o;
-        return Objects.equals(id, tarefa.id);
+        Task task = (Task) o;
+        return Objects.equals(id, task.id);
     }
 
     @Override
