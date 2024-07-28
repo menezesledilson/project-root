@@ -2,6 +2,8 @@ package com.crud.project_root.controllers;
 
 import com.crud.project_root.domain.task.Task;
 import com.crud.project_root.service.TaskService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,12 +16,14 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/task")
+@Tag(name = "2. Task")
 public class TaskController {
 
     @Autowired
     private TaskService taskService;
 
     @GetMapping("/all")
+    @Operation(summary = "Get all tasks", tags = { "2. Task" })
     public ResponseEntity<List<Task>> getTaskAll() {
         List<Task> Tasks = taskService.listTaskAll();
         return ResponseEntity.ok().body(Tasks);

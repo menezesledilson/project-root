@@ -1,8 +1,5 @@
 package com.crud.project_root.domain.task;
-
-//http://localhost:8081/swagger-ui/index.html
 import jakarta.persistence.*;
-
 import java.util.Objects;
 
 @Entity

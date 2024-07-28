@@ -1,72 +1,56 @@
 package com.crud.project_root.controllers;
 
+
 import com.crud.project_root.domain.user.AuthenticationDTO;
+import com.crud.project_root.domain.user.LoginResponseDTO;
 import com.crud.project_root.domain.user.RegisterDTO;
 import com.crud.project_root.domain.user.User;
+import com.crud.project_root.infra.security.TokenService;
 import com.crud.project_root.repositories.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
 
 @RestController
 @RequestMapping("auth")
+@Tag(name = "1. Authentication")
 public class AuthenticationController {
-
     @Autowired
     private AuthenticationManager authenticationManager;
-
     @Autowired
     private UserRepository repository;
-
     @Autowired
-    private PasswordEncoder passwordEncoder; // Injetar PasswordEncoder
+    private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody @Valid AuthenticationDTO data) {
-        try {
-            var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
-            var auth = this.authenticationManager.authenticate(usernamePassword);
+    @Operation(summary = "Login", tags = { "1. Authentication" })
+    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data){
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
+        var auth = this.authenticationManager.authenticate(usernamePassword);
 
-            // Retornar sucesso com uma mensagem ou token, se aplicável
-            return ResponseEntity.ok().body("Login successful"); // Adicione uma resposta de sucesso apropriada
+        var token = tokenService.generateToken((User) auth.getPrincipal());
 
-        } catch (Exception e) {
-            // Retornar mensagem de erro se falha na autenticação
-            return ResponseEntity.status(401).body("Login failed: " + e.getMessage());
-        }
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
-
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody @Valid RegisterDTO data) {
-        // Verificar se o login já existe
-        if (this.repository.findByLogin(data.login()) != null) {
-            return ResponseEntity.badRequest().body("Username already exists.");
-        }
+    public ResponseEntity register(@RequestBody @Valid RegisterDTO data){
+        if(this.repository.findByLogin(data.login()) != null) return ResponseEntity.badRequest().build();
 
-        // Criptografar a senha
-        String encryptedPassword = passwordEncoder.encode(data.password());
+        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
         User newUser = new User(data.login(), encryptedPassword, data.role());
 
-        // Salvar o novo usuário no banco de dados
         this.repository.save(newUser);
 
-        // Criar URI para o novo recurso
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(newUser.getId())
-                .toUri();
-
-        // Retornar sucesso com URI do novo recurso
-        return ResponseEntity.created(uri).body("User registered successfully.");
+        return ResponseEntity.ok().build();
     }
 }
