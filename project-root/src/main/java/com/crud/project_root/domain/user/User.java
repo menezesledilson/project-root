@@ -22,7 +22,7 @@ import java.util.Objects;
 public class User implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  String id;
+    private  Long id;
     private  String login;
     private String password;
     private  UserRole role;
