@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: todo-app
+  datasource:
+    url: jdbc:postgresql://dpg-cqke15g8fa8c73clir00-a.oregon-postgres.render.com:5432/tarefa_sao3
+    password: usitTOoCB0n1gyfMhwnHirWaoAqPLTGf
+    username: admin
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET:my-secret-key}
