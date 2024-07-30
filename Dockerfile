@@ -8,8 +8,12 @@ RUN apt-get update && \
 # Define o diretório de trabalho
 WORKDIR /app
 
+# Copia o arquivo pom.xml e baixa as dependências
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
 # Copia o código fonte para o container
-COPY . .
+COPY src ./src
 
 # Compila o projeto
 RUN mvn clean install
