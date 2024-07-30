@@ -8,15 +8,11 @@ RUN apt-get update && \
 # Define o diretório de trabalho
 WORKDIR /app
 
-# Copia o arquivo pom.xml e baixa as dependências
-COPY pom.xml .
-RUN mvn dependency:go-offline
-
 # Copia o código fonte para o container
-COPY src ./src
+COPY . .
 
-# Compila o projeto
-RUN mvn clean install
+# Compila o projeto sem rodar os testes
+RUN mvn clean install -DskipTests
 
 # Estágio final
 FROM openjdk:17-jdk-slim
