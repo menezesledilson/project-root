@@ -1,11 +1,12 @@
-# Use a imagem base do OpenJDK 17
+# Use a imagem base do OpenJDK 17 para a construção
 FROM openjdk:17-jdk-slim AS build
 
 # Define o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copia os arquivos do projeto para o diretório de trabalho
-COPY . .
+# Copia o arquivo POM e o diretório src para o diretório de trabalho
+COPY pom.xml ./
+COPY src ./src
 
 # Instala Maven
 RUN apt-get update && apt-get install -y maven
