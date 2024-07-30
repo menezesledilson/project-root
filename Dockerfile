@@ -1,12 +1,14 @@
-# Etapa 1: Construir o JAR
-FROM maven:3.8.6-openjdk-17 AS build
-WORKDIR /app
-COPY . /app
-RUN mvn clean package
-
-# Etapa 2: Criar a imagem final
+# Use a imagem base do OpenJDK 17
 FROM openjdk:17-jdk-slim
+
+# Define o diretório de trabalho dentro do container
 WORKDIR /app
-COPY --from=build /app/target/project-root-0.0.1-SNAPSHOT.jar /app/project-root-0.0.1-SNAPSHOT.jar
-ENTRYPOINT ["java", "-jar", "/app/project-root-0.0.1-SNAPSHOT.jar"]
+
+# Copia o JAR da aplicação para o diretório de trabalho
+COPY target/project-root-0.0.1-SNAPSHOT.jar /app/project-root-0.0.1-SNAPSHOT.jar
+
+# Exponha a porta na qual sua aplicação está rodando
 EXPOSE 8080
+
+# Comando para executar a aplicação
+ENTRYPOINT ["java", "-jar", "/app/project-root-0.0.1-SNAPSHOT.jar"]
