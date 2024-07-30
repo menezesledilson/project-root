@@ -1,5 +1,5 @@
 #surefire
-#Tue Jul 30 11:20:33 BRT 2024
+#Tue Jul 30 11:28:42 BRT 2024
 classPathUrl.101=/home/ledilson/.m2/repository/org/springframework/spring-aop/6.1.11/spring-aop-6.1.11.jar
 classPathUrl.102=/home/ledilson/.m2/repository/org/springframework/security/spring-security-config/6.2.5/spring-security-config-6.2.5.jar
 classPathUrl.100=/home/ledilson/.m2/repository/org/springframework/boot/spring-boot-starter-security/3.2.8/spring-boot-starter-security-3.2.8.jar
@@ -105,7 +105,7 @@ classPathUrl.16=/home/ledilson/.m2/repository/org/glassfish/jaxb/jaxb-core/4.0.5
 classPathUrl.17=/home/ledilson/.m2/repository/org/eclipse/angus/angus-activation/2.0.2/angus-activation-2.0.2.jar
 classPathUrl.18=/home/ledilson/.m2/repository/org/glassfish/jaxb/txw2/4.0.5/txw2-4.0.5.jar
 classPathUrl.19=/home/ledilson/.m2/repository/com/sun/istack/istack-commons-runtime/4.1.2/istack-commons-runtime-4.1.2.jar
-pluginPid=24554
+pluginPid=25711
 shutdown=EXIT
 classPathUrl.4=/home/ledilson/.m2/repository/org/aspectj/aspectjweaver/1.9.22.1/aspectjweaver-1.9.22.1.jar
 classPathUrl.5=/home/ledilson/.m2/repository/org/springframework/boot/spring-boot-starter-jdbc/3.2.8/spring-boot-starter-jdbc-3.2.8.jar
