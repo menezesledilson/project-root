@@ -12,8 +12,15 @@ WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 
+# Copia também o Maven Wrapper
+COPY mvnw .
+COPY .mvn .mvn
+
+# Concede permissão de execução para o Maven Wrapper
+RUN chmod +x mvnw
+
 # Compila o projeto e gera o arquivo JAR
-RUN mvn clean install
+RUN ./mvnw clean install
 
 # Fase de Execução
 FROM openjdk:17-jdk-slim
