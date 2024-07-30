@@ -1,15 +1,16 @@
 # Fase de Build
 FROM ubuntu:latest AS build
 
-# Atualiza os pacotes e instala o OpenJDK 17
+# Atualiza os pacotes e instala o OpenJDK 17 e o Maven
 RUN apt-get update && \
     apt-get install -y openjdk-17-jdk maven
 
-# Define o diretório de trabalho
+# Define o diretório de trabalho para o Maven
 WORKDIR /app
 
-# Copia o conteúdo do projeto para a imagem
-COPY . .
+# Copia o arquivo pom.xml e o diretório src para o diretório de trabalho
+COPY pom.xml .
+COPY src ./src
 
 # Compila o projeto e gera o arquivo JAR
 RUN mvn clean install
@@ -17,7 +18,7 @@ RUN mvn clean install
 # Fase de Execução
 FROM openjdk:17-jdk-slim
 
-# Define o diretório de trabalho
+# Define o diretório de trabalho para o Java
 WORKDIR /app
 
 # Expõe a porta que a aplicação usará
