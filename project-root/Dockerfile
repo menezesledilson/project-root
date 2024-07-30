@@ -1,30 +1,16 @@
-# Use a imagem base do OpenJDK 17 para a construção
-FROM openjdk:17-jdk-slim AS build
+FROM ubuntu:latest AS build
 
-# Define o diretório de trabalho dentro do container
-WORKDIR /app
+RUN apt-get update
+RUN apt-get install openjdk-17-jdk -y
+COPY . .
 
-# Copia o arquivo POM e o diretório src para o diretório de trabalho
-COPY pom.xml ./
-COPY src ./src
+RUN apt-get install maven -y
+RUN mvn clean install
 
-# Instala Maven
-RUN apt-get update && apt-get install -y maven
+FROM openJdk:17-jdk-slim
 
-# Executa o Maven para compilar a aplicação
-RUN mvn clean package -DskipTests
-
-# Use uma imagem base do OpenJDK 17 para o runtime
-FROM openjdk:17-jdk-slim
-
-# Define o diretório de trabalho dentro do container
-WORKDIR /app
-
-# Copia o JAR da aplicação do estágio de build para o diretório de trabalho
-COPY --from=build /app/target/project-root-0.0.1-SNAPSHOT.jar /app/project-root-0.0.1-SNAPSHOT.jar
-
-# Exponha a porta na qual sua aplicação está rodando
 EXPOSE 8080
 
-# Comando para executar a aplicação
-ENTRYPOINT ["java", "-jar", "/app/project-root-0.0.1-SNAPSHOT.jar"]
+COPY --from=build /target/project-root-0.0.1-SNAPSHOT.jar app.jar
+
+ENTRYPOINT["java","-jar","app.jar"]
