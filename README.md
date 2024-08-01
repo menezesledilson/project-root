@@ -61,7 +61,7 @@ O projeto consiste em uma API RESTful em Java para gerenciar tarefas, implementa
 ### Tarefas (CRUD)
 - **Criar Tarefa**
   - **Método:** `POST`
-  - **URL:** `https://project-root-jtpp.onrender.com/task/create
+  - **URL:** `https://project-root-jtpp.onrender.com/task/create`
   - **Corpo da Requisição:** 
     ```json
     {
